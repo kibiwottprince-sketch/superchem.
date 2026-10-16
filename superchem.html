@@ -1,0 +1,646 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy"
+content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+
+<title>SuperChem | prince.k</title>
+
+<style>
+:root {
+    color-scheme: dark;
+    --cyan: #35e8ff;
+    --green: #7cffb2;
+    --panel: #11263a;
+    --background: #07111e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--background);
+    color: #edf8ff;
+    line-height: 1.6;
+}
+
+header {
+    padding: 30px 16px;
+    text-align: center;
+    background: linear-gradient(135deg, #0b2941, #075b68);
+    border-bottom: 2px solid var(--cyan);
+}
+
+header h1 {
+    margin: 0;
+    font-size: clamp(38px, 8vw, 58px);
+    color: var(--cyan);
+    letter-spacing: 3px;
+    text-shadow: 0 0 18px #35e8ff55;
+}
+
+header p { margin-bottom: 0; }
+
+nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 14px;
+    background: #0b1b2c;
+}
+
+nav a {
+    color: var(--cyan);
+    text-decoration: none;
+}
+
+nav a:hover { text-decoration: underline; }
+
+main {
+    width: min(850px, 92%);
+    margin: 30px auto;
+}
+
+.card {
+    background: var(--panel);
+    padding: 24px;
+    margin-bottom: 22px;
+    border: 1px solid #244960;
+    border-radius: 14px;
+}
+
+h2 { color: var(--cyan); }
+
+label {
+    display: block;
+    margin: 15px 0 7px;
+    font-weight: bold;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 7px;
+    border: 1px solid #42657c;
+    background: #071522;
+    color: white;
+    font: inherit;
+}
+
+textarea { resize: vertical; }
+
+button {
+    padding: 12px 18px;
+    margin-top: 14px;
+    background: var(--cyan);
+    color: #04131d;
+    border: 0;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+button:hover { background: white; }
+
+button:focus-visible, a:focus-visible,
+input:focus-visible, textarea:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--green);
+    outline-offset: 3px;
+}
+
+.secondary {
+    background: #29465c;
+    color: white;
+    margin-left: 5px;
+}
+
+.result {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 9px;
+    background: #061522;
+    border-left: 4px solid var(--green);
+    overflow-wrap: anywhere;
+}
+
+.equation {
+    color: var(--green);
+    font-size: clamp(20px, 4vw, 29px);
+    font-weight: bold;
+    text-align: center;
+    padding: 15px 0;
+}
+
+.note {
+    color: #c0d4e3;
+    font-size: 14px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    border-top: 1px solid #244960;
+    color: #c0d4e3;
+}
+
+footer strong { color: var(--cyan); }
+
+[hidden] { display: none !important; }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>SuperChem</h1>
+    <p>Your chemistry learning and equation-balancing lab</p>
+    <p>Understand reactions. Balance equations. Learn science.</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#assistant">Reaction Assistant</a>
+    <a href="#balancer">Equation Balancer</a>
+    <a href="#safety">Safety</a>
+</nav>
+
+<main id="home">
+
+<section class="card">
+    <h2>Welcome to SuperChem!</h2>
+    <p>
+        Describe a chemical reaction in simple words or enter
+        an unbalanced equation. SuperChem will help you balance
+        supported equations and check the atoms on each side.
+    </p>
+    <p class="note">
+        This educational version works locally in your browser.
+        It does not use an online AI service.
+    </p>
+</section>
+
+<section class="card" id="assistant">
+    <h2>1. Reaction Assistant</h2>
+
+    <label for="description">Describe your reaction</label>
+    <textarea id="description" rows="3"
+    placeholder="Example: hydrogen reacts with oxygen to form water"></textarea>
+
+    <button id="recognize">Identify reaction</button>
+
+    <div id="assistantResult" class="result" hidden
+    aria-live="polite"></div>
+
+    <p class="note">
+        The assistant recognises selected examples only.
+        It cannot reliably infer every reaction from natural language.
+    </p>
+</section>
+
+<section class="card" id="balancer">
+    <h2>2. Chemical Equation Balancer</h2>
+
+    <p>Enter the reactants and products, separated by an arrow.</p>
+
+    <label for="equation">Unbalanced equation</label>
+    <input id="equation" type="text"
+    placeholder="Example: H2 + O2 -> H2O"
+    autocomplete="off" spellcheck="false">
+
+    <button id="balance">Balance equation</button>
+    <button id="example" class="secondary">Try an example</button>
+
+    <div id="balanceResult" class="result" hidden
+    aria-live="polite"></div>
+
+    <p class="note">
+        Supported input: element symbols, subscripts written as
+        ordinary numbers, and parentheses in chemical formulas.
+        Use + between substances and -> between sides.
+    </p>
+</section>
+
+<section class="card" id="safety">
+    <h2>3. Security and Privacy</h2>
+    <ul>
+        <li>No advertisements or advertising trackers are included.</li>
+        <li>No external scripts, libraries or images are loaded.</li>
+        <li>This page makes no network requests.</li>
+        <li>Your entries are processed in this browser and are not
+            sent to a website server by this program.</li>
+    </ul>
+    <p class="note">
+        These measures reduce this page's exposure to outside
+        content. They do not block malware throughout your device,
+        replace antivirus software, or guarantee total security.
+        Keep Windows and your browser updated.
+    </p>
+</section>
+
+<section class="card">
+    <h2>How balancing works</h2>
+    <p>
+        A balanced chemical equation has the same number of atoms
+        of every element on both sides. Change the coefficients
+        before chemical formulas, not the subscripts inside them.
+    </p>
+    <p><strong>Example:</strong> hydrogen + oxygen forms water.</p>
+    <p class="equation">2H₂ + O₂ → 2H₂O</p>
+</section>
+
+</main>
+
+<footer>
+    <p>SuperChem | Chemistry made easier</p>
+    <p>Created by <strong>prince.k</strong></p>
+    <p class="note">Educational tool — verify reactions with a trusted
+    chemistry textbook or teacher.</p>
+</footer>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+
+const knownReactions = [
+    {
+        words: ["hydrogen", "oxygen", "water"],
+        equation: "H2 + O2 -> H2O",
+        name: "Formation of water"
+    },
+    {
+        words: ["magnesium", "oxygen", "magnesium oxide"],
+        equation: "Mg + O2 -> MgO",
+        name: "Formation of magnesium oxide"
+    },
+    {
+        words: ["hydrochloric acid", "sodium hydroxide"],
+        equation: "HCl + NaOH -> NaCl + H2O",
+        name: "Acid-base neutralisation"
+    },
+    {
+        words: ["methane", "oxygen", "carbon dioxide", "water"],
+        equation: "CH4 + O2 -> CO2 + H2O",
+        name: "Complete combustion of methane"
+    },
+    {
+        words: ["nitrogen", "hydrogen", "ammonia"],
+        equation: "N2 + H2 -> NH3",
+        name: "Formation of ammonia"
+    },
+    {
+        words: ["iron", "oxygen", "iron oxide"],
+        equation: "Fe + O2 -> Fe2O3",
+        name: "Formation of iron(III) oxide"
+    }
+];
+
+function showMessage(id, message) {
+    const box = $(id);
+    box.replaceChildren();
+    const p = document.createElement("p");
+    p.textContent = message;
+    box.appendChild(p);
+    box.hidden = false;
+}
+
+function displayEquation(id, heading, equation, details) {
+    const box = $(id);
+    box.replaceChildren();
+
+    const title = document.createElement("p");
+    title.textContent = heading;
+    box.appendChild(title);
+
+    const eq = document.createElement("p");
+    eq.className = "equation";
+    eq.textContent = equation;
+    box.appendChild(eq);
+
+    const detail = document.createElement("p");
+    detail.textContent = details;
+    box.appendChild(detail);
+
+    box.hidden = false;
+}
+
+function identifyReaction() {
+    const description = $("description").value
+        .toLowerCase().trim();
+
+    if (!description) {
+        showMessage("assistantResult",
+            "Please describe a reaction first.");
+        return;
+    }
+
+    const match = knownReactions.find(reaction =>
+        reaction.words.every(word => description.includes(word))
+    );
+
+    if (!match) {
+        showMessage("assistantResult",
+            "I could not identify this reaction from my small example " +
+            "library. Try a supported example or enter the reactants " +
+            "and products in the Equation Balancer below. Do not assume " +
+            "a reaction occurs just because its substances are named.");
+        return;
+    }
+
+    $("equation").value = match.equation;
+
+    displayEquation(
+        "assistantResult",
+        match.name + " — proposed equation:",
+        match.equation.replace("->", "→"),
+        "This is a recognised example. Select Balance equation " +
+        "to calculate and check its coefficients."
+    );
+}
+
+function parseFormula(formula) {
+    const tokens = formula.match(/[A-Z][a-z]?|[0-9]+|[()]/g);
+
+    if (!tokens || tokens.join("") !== formula) {
+        throw new Error("Invalid formula: " + formula);
+    }
+
+    let index = 0;
+
+    function parseGroup(nested) {
+        const atoms = {};
+
+        while (index < tokens.length) {
+            const token = tokens[index];
+
+            if (token === ")") {
+                if (!nested) {
+                    throw new Error("Unexpected closing parenthesis.");
+                }
+                index++;
+                return atoms;
+            }
+
+            if (token === "(") {
+                index++;
+                const inside = parseGroup(true);
+
+                let multiplier = 1;
+                if (index < tokens.length &&
+                    /^[0-9]+$/.test(tokens[index])) {
+                    multiplier = Number(tokens[index++]);
+                }
+
+                if (multiplier < 1) {
+                    throw new Error("Invalid group multiplier.");
+                }
+
+                for (const element in inside) {
+                    atoms[element] = (atoms[element] || 0) +
+                        inside[element] * multiplier;
+                }
+                continue;
+            }
+
+            if (!/^[A-Z][a-z]?$/.test(token)) {
+                throw new Error("Invalid chemical formula.");
+            }
+
+            index++;
+            let count = 1;
+
+            if (index < tokens.length &&
+                /^[0-9]+$/.test(tokens[index])) {
+                count = Number(tokens[index++]);
+                if (count < 1) {
+                    throw new Error("Atom counts must be positive.");
+                }
+            }
+
+            atoms[token] = (atoms[token] || 0) + count;
+        }
+
+        if (nested) {
+            throw new Error("Missing closing parenthesis.");
+        }
+
+        return atoms;
+    }
+
+    const result = parseGroup(false);
+
+    if (index !== tokens.length) {
+        throw new Error("Could not read the entire formula.");
+    }
+
+    return result;
+}
+
+function parseEquation(raw) {
+    const normal = raw
+        .replace(/→|⇒|=/g, "->")
+        .replace(/−/g, "-")
+        .replace(/\s+/g, "");
+
+    const parts = normal.split("->");
+
+    if (parts.length !== 2 || !parts[0] || !parts[1]) {
+        throw new Error(
+            "Use this format: H2 + O2 -> H2O"
+        );
+    }
+
+    function parseSide(side) {
+        const formulas = side.split("+");
+
+        if (formulas.some(f => !f) ||
+            formulas.length > 5) {
+            throw new Error(
+                "Each side needs 1–5 formulas separated by +."
+            );
+        }
+
+        return formulas.map(formula => {
+            if (!/^(?:[A-Z][a-z]?|[0-9]+|\(|\))+$/.test(formula)) {
+                throw new Error(
+                    "Enter chemical formulas only, without existing " +
+                    "coefficients. Example: Fe2O3"
+                );
+            }
+            return {
+                formula,
+                atoms: parseFormula(formula)
+            };
+        });
+    }
+
+    const left = parseSide(parts[0]);
+    const right = parseSide(parts[1]);
+
+    if (left.length + right.length > 6) {
+        throw new Error(
+            "For this version, use no more than six substances."
+        );
+    }
+
+    return { left, right };
+}
+
+function balanceEquation(raw) {
+    const parsed = parseEquation(raw);
+    const species = [...parsed.left, ...parsed.right];
+    const elements = [...new Set(
+        species.flatMap(s => Object.keys(s.atoms))
+    )].sort();
+
+    if (elements.length === 0) {
+        throw new Error("No chemical elements were found.");
+    }
+
+    const signs = species.map((s, i) =>
+        i < parsed.left.length ? 1 : -1
+    );
+
+    const coefficients = Array(species.length).fill(1);
+    let solution = null;
+    let attempts = 0;
+
+    // Search for the smallest maximum coefficient, up to 12.
+    for (let limit = 1; limit <= 12 && !solution; limit++) {
+        function search(position, hasLimit) {
+            if (solution || attempts > 1500000) return;
+
+            if (position === coefficients.length) {
+                attempts++;
+
+                if (!hasLimit) return;
+
+                for (const element of elements) {
+                    let total = 0;
+
+                    species.forEach((s, i) => {
+                        total += signs[i] * coefficients[i] *
+                            (s.atoms[element] || 0);
+                    });
+
+                    if (total !== 0) return;
+                }
+
+                solution = coefficients.slice();
+                return;
+            }
+
+            for (let value = 1; value <= limit; value++) {
+                coefficients[position] = value;
+                search(position + 1,
+                    hasLimit || value === limit);
+                if (solution) return;
+            }
+        }
+
+        search(0, false);
+    }
+
+    if (!solution) {
+        throw new Error(
+            "No balance was found within the search limit. " +
+            "Check the formulas and products, or try a simpler equation."
+        );
+    }
+
+    // Divide by the greatest common divisor.
+    function gcd(a, b) {
+        return b === 0 ? a : gcd(b, a % b);
+    }
+
+    const divisor = solution.reduce((a, b) => gcd(a, b));
+
+    solution = solution.map(n => n / divisor);
+
+    const leftText = parsed.left.map((s, i) =>
+        (solution[i] === 1 ? "" : solution[i]) + s.formula
+    ).join(" + ");
+
+    const rightText = parsed.right.map((s, i) => {
+        const coefficient = solution[parsed.left.length + i];
+        return (coefficient === 1 ? "" : coefficient) + s.formula;
+    }).join(" + ");
+
+    return {
+        equation: leftText + " → " + rightText,
+        species,
+        coefficients: solution,
+        elements,
+        leftCount: parsed.left.length
+    };
+}
+
+function balanceCurrentEquation() {
+    const raw = $("equation").value.trim();
+
+    if (!raw) {
+        showMessage("balanceResult",
+            "Enter an unbalanced chemical equation first.");
+        return;
+    }
+
+    try {
+        const result = balanceEquation(raw);
+        const lines = [];
+
+        for (const element of result.elements) {
+            let leftTotal = 0;
+            let rightTotal = 0;
+
+            result.species.forEach((s, i) => {
+                const amount = result.coefficients[i] *
+                    (s.atoms[element] || 0);
+
+                if (i < result.leftCount) {
+                    leftTotal += amount;
+                } else {
+                    rightTotal += amount;
+                }
+            });
+
+            lines.push(element + ": " + leftTotal +
+                " on the left, " + rightTotal + " on the right");
+        }
+
+        displayEquation(
+            "balanceResult",
+            "Balanced equation:",
+            result.equation,
+            "Atom check:\n" + lines.join("\n")
+        );
+
+        $("balanceResult").style.whiteSpace = "pre-line";
+
+    } catch (error) {
+        showMessage("balanceResult",
+            "Unable to balance: " + error.message);
+    }
+}
+
+$("recognize").addEventListener("click", identifyReaction);
+$("balance").addEventListener("click", balanceCurrentEquation);
+
+$("example").addEventListener("click", () => {
+    $("equation").value = "Fe + O2 -> Fe2O3";
+    balanceCurrentEquation();
+});
+
+$("equation").addEventListener("keydown", event => {
+    if (event.key === "Enter") balanceCurrentEquation();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,688 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy"
+content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:;">
+<title>SuperChem | Chemistry Made Simple</title>
+
+<style>
+:root {
+    --navy: #092b50;
+    --cyan: #35d0e8;
+    --blue: #103e68;
+    --light: #f0f5fa;
+    --white: #ffffff;
+    --text: #18334d;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--light);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+header {
+    background: var(--navy);
+    color: white;
+    padding: 18px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--cyan);
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: var(--cyan);
+}
+
+.hero {
+    background: var(--blue);
+    color: white;
+    text-align: center;
+    padding: 85px 20px;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 5vw, 48px);
+    margin-bottom: 15px;
+}
+
+.hero span {
+    color: var(--cyan);
+}
+
+.hero p {
+    max-width: 650px;
+    margin: auto;
+    font-size: 17px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 45px auto;
+}
+
+.section-title {
+    color: var(--navy);
+    margin-bottom: 22px;
+    font-size: 27px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.card h3 {
+    color: var(--navy);
+    margin-bottom: 10px;
+}
+
+.tool {
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 12px 0;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 16px;
+}
+
+button {
+    background: var(--navy);
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+    margin: 5px 3px;
+}
+
+button:hover {
+    background: #14578c;
+}
+
+.result {
+    background: #e9faff;
+    border-left: 4px solid var(--cyan);
+    padding: 16px;
+    margin-top: 18px;
+    border-radius: 6px;
+    overflow-wrap: anywhere;
+}
+
+.result strong {
+    color: var(--navy);
+}
+
+.examples button {
+    background: #e3edf5;
+    color: var(--navy);
+    font-size: 13px;
+}
+
+footer {
+    background: var(--navy);
+    color: white;
+    text-align: center;
+    padding: 28px;
+    margin-top: 60px;
+}
+
+footer span {
+    color: var(--cyan);
+}
+
+@media(max-width:600px) {
+    header {
+        justify-content: center;
+    }
+
+    nav a {
+        margin: 5px 8px;
+        display: inline-block;
+    }
+
+    .hero {
+        padding: 60px 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">SuperChem 🧪</div>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#topics">Topics</a>
+        <a href="#tools">Tools</a>
+        <a href="#safety">Safety</a>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+    <h1>Welcome to <span>SuperChem</span></h1>
+    <p>
+        Explore chemistry, balance chemical equations,
+        understand reactions and discover the science
+        behind the world around you.
+    </p>
+</section>
+
+<main>
+
+<section class="container" id="topics">
+    <h2 class="section-title">Explore Chemistry</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Organic Chemistry</h3>
+            <p>Explore carbon compounds, hydrocarbons,
+            alcohols and organic reactions.</p>
+        </div>
+
+        <div class="card">
+            <h3>Inorganic Chemistry</h3>
+            <p>Discover elements, metals, non-metals,
+            salts, acids and bases.</p>
+        </div>
+
+        <div class="card">
+            <h3>Physical Chemistry</h3>
+            <p>Understand energy changes, rates of reaction
+            and chemical equilibrium.</p>
+        </div>
+    </div>
+</section>
+
+<section class="container" id="tools">
+    <h2 class="section-title">SuperChem Tools</h2>
+
+    <div class="tool">
+        <h3>⚗️ Chemical Equation Balancer</h3>
+        <p>Enter an unbalanced chemical equation below.</p>
+
+        <input
+            id="equation"
+            type="text"
+            placeholder="Example: H2 + O2 -> H2O"
+            autocomplete="off"
+        >
+
+        <div class="examples">
+            <p>Try an example:</p>
+            <button onclick="setExample('H2 + O2 -> H2O')">
+                Water
+            </button>
+            <button onclick="setExample('Fe + O2 -> Fe2O3')">
+                Iron oxide
+            </button>
+            <button onclick="setExample('C3H8 + O2 -> CO2 + H2O')">
+                Propane
+            </button>
+        </div>
+
+        <button onclick="balanceEquation()">Balance Equation</button>
+
+        <div id="balanceResult" class="result">
+            Your balanced equation will appear here.
+        </div>
+    </div>
+
+    <div class="tool">
+        <h3>🔬 Atom Checker</h3>
+        <p>Check how many atoms of each element occur in a formula.</p>
+
+        <input
+            id="formula"
+            type="text"
+            placeholder="Example: Ca(OH)2"
+            autocomplete="off"
+        >
+
+        <button onclick="checkAtoms()">Count Atoms</button>
+
+        <div id="atomResult" class="result">
+            Your atom count will appear here.
+        </div>
+    </div>
+
+    <div class="tool">
+        <h3>💡 Reaction Assistant</h3>
+        <p>Explore some common chemical reactions.</p>
+
+        <button onclick="showReaction('water')">
+            Formation of water
+        </button>
+
+        <button onclick="showReaction('neutralization')">
+            Neutralization
+        </button>
+
+        <button onclick="showReaction('combustion')">
+            Combustion
+        </button>
+
+        <div id="reactionResult" class="result">
+            Select a reaction to learn more.
+        </div>
+    </div>
+</section>
+
+<section class="container" id="safety">
+    <h2 class="section-title">⚠️ Chemistry Safety</h2>
+
+    <div class="card">
+        <p>Always observe laboratory safety rules:</p>
+        <ul>
+            <li>Wear appropriate protective equipment.</li>
+            <li>Never taste laboratory chemicals.</li>
+            <li>Never mix unknown substances.</li>
+            <li>Follow your teacher's instructions.</li>
+            <li>Report spills and accidents immediately.</li>
+        </ul>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <p><span>SuperChem</span> | Learn. Discover. Experiment.</p>
+    <p>Created by prince.k</p>
+    <p>© 2026 SuperChem</p>
+</footer>
+
+<script>
+
+// ==================================
+// SUPERCHEM: CHEMICAL FORMULA PARSER
+// ==================================
+
+function parseFormula(formula) {
+    let position = 0;
+
+    function parseGroup() {
+        const atoms = {};
+
+        while (position < formula.length) {
+            const char = formula[position];
+
+            if (char === ')' || char === ']') {
+                break;
+            }
+
+            if (char === '(' || char === '[') {
+                position++;
+
+                const inner = parseGroup();
+
+                if (position >= formula.length ||
+                    (formula[position] !== ')' &&
+                     formula[position] !== ']')) {
+                    throw new Error("Unmatched bracket.");
+                }
+
+                position++;
+
+                const multiplier = readNumber();
+
+                for (const element in inner) {
+                    atoms[element] = (atoms[element] || 0)
+                        + inner[element] * multiplier;
+                }
+
+            } else {
+                const match = formula.slice(position)
+                    .match(/^([A-Z][a-z]?)/);
+
+                if (!match) {
+                    throw new Error("Invalid chemical formula.");
+                }
+
+                const element = match[1];
+                position += element.length;
+
+                const count = readNumber();
+
+                atoms[element] = (atoms[element] || 0) + count;
+            }
+        }
+
+        return atoms;
+    }
+
+    function readNumber() {
+        const match = formula.slice(position).match(/^\d+/);
+
+        if (!match) return 1;
+
+        position += match[0].length;
+        const number = Number(match[0]);
+
+        if (number < 1) {
+            throw new Error("Invalid atom multiplier.");
+        }
+
+        return number;
+    }
+
+    if (!formula || !/^[A-Za-z0-9()[\]]+$/.test(formula)) {
+        throw new Error("Enter a valid chemical formula.");
+    }
+
+    const result = parseGroup();
+
+    if (position !== formula.length) {
+        throw new Error("Invalid brackets in formula.");
+    }
+
+    return result;
+}
+
+
+// ==================================
+// ATOM CHECKER
+// ==================================
+
+function checkAtoms() {
+    const formula = document.getElementById("formula").value.trim();
+    const output = document.getElementById("atomResult");
+
+    try {
+        const atoms = parseFormula(formula);
+
+        let html = "<strong>Atom count for " + formula + "</strong><br>";
+
+        let total = 0;
+
+        for (const element in atoms) {
+            html += element + ": " + atoms[element] + "<br>";
+            total += atoms[element];
+        }
+
+        html += "<br><strong>Total atoms: " + total + "</strong>";
+
+        output.innerHTML = html;
+
+    } catch (error) {
+        output.textContent = error.message;
+    }
+}
+
+
+// ==================================
+// EQUATION BALANCER
+// ==================================
+
+function gcd(a, b) {
+    a = Math.abs(a);
+    b = Math.abs(b);
+
+    while (b) {
+        const temp = b;
+        b = a % b;
+        a = temp;
+    }
+
+    return a || 1;
+}
+
+function balanceEquation() {
+    const input = document.getElementById("equation").value.trim();
+    const output = document.getElementById("balanceResult");
+
+    try {
+        const sides = input.split(/\s*(?:->|→|=)\s*/);
+
+        if (sides.length !== 2) {
+            throw new Error("Use an arrow between reactants and products.");
+        }
+
+        const reactants = sides[0].split("+").map(x => x.trim());
+        const products = sides[1].split("+").map(x => x.trim());
+
+        if ([...reactants, ...products].some(x => !x)) {
+            throw new Error("One or more compounds are missing.");
+        }
+
+        const compounds = [...reactants, ...products];
+
+        const compositions = compounds.map(parseFormula);
+
+        const elements = [...new Set(
+            compositions.flatMap(x => Object.keys(x))
+        )].sort();
+
+        const matrix = elements.map(element =>
+            compositions.map((composition, index) => {
+                const count = composition[element] || 0;
+                return index < reactants.length ? count : -count;
+            })
+        );
+
+        const rows = matrix.length;
+        const cols = compounds.length;
+
+        // Reduced row echelon form
+        let pivotColumns = [];
+        let pivotRow = 0;
+
+        for (let col = 0; col < cols && pivotRow < rows; col++) {
+            let selected = pivotRow;
+
+            for (let r = pivotRow + 1; r < rows; r++) {
+                if (Math.abs(matrix[r][col]) >
+                    Math.abs(matrix[selected][col])) {
+                    selected = r;
+                }
+            }
+
+            if (Math.abs(matrix[selected][col]) < 1e-10) {
+                continue;
+            }
+
+            [matrix[pivotRow], matrix[selected]] =
+                [matrix[selected], matrix[pivotRow]];
+
+            const divisor = matrix[pivotRow][col];
+
+            for (let c = 0; c < cols; c++) {
+                matrix[pivotRow][c] /= divisor;
+            }
+
+            for (let r = 0; r < rows; r++) {
+                if (r === pivotRow) continue;
+
+                const factor = matrix[r][col];
+
+                for (let c = 0; c < cols; c++) {
+                    matrix[r][c] -= factor * matrix[pivotRow][c];
+                }
+            }
+
+            pivotColumns.push(col);
+            pivotRow++;
+        }
+
+        const freeColumns = [];
+
+        for (let c = 0; c < cols; c++) {
+            if (!pivotColumns.includes(c)) {
+                freeColumns.push(c);
+            }
+        }
+
+        if (freeColumns.length !== 1) {
+            throw new Error(
+                "This equation needs a more advanced balancing method. " +
+                "Try a simpler equation."
+            );
+        }
+
+        const coefficients = Array(cols).fill(0);
+        const freeColumn = freeColumns[0];
+
+        coefficients[freeColumn] = 1;
+
+        for (let r = pivotColumns.length - 1; r >= 0; r--) {
+            const col = pivotColumns[r];
+            coefficients[col] = -matrix[r][freeColumn];
+        }
+
+        // Convert decimal coefficients into integers.
+        const scale = 1000000;
+
+        let integers = coefficients.map(value =>
+            Math.round(value * scale)
+        );
+
+        let divisor = integers.reduce((a, b) => gcd(a, b));
+
+        integers = integers.map(value => value / divisor);
+
+        if (integers.every(x => x < 0)) {
+            integers = integers.map(x => -x);
+        }
+
+        if (integers.some(x => x <= 0)) {
+            throw new Error("No positive balancing coefficients found.");
+        }
+
+        // Verify atom conservation.
+        for (const element of elements) {
+            let total = 0;
+
+            compositions.forEach((composition, index) => {
+                const sign = index < reactants.length ? 1 : -1;
+
+                total += sign *
+                    (composition[element] || 0) *
+                    integers[index];
+            });
+
+            if (total !== 0) {
+                throw new Error("Could not verify the balanced equation.");
+            }
+        }
+
+        function formatCompound(compound, coefficient) {
+            return (coefficient === 1 ? "" : coefficient) + compound;
+        }
+
+        const left = reactants.map((compound, index) =>
+            formatCompound(compound, integers[index])
+        );
+
+        const right = products.map((compound, index) =>
+            formatCompound(compound, integers[index + reactants.length])
+        );
+
+        const balanced = left.join(" + ") + " → " + right.join(" + ");
+
+        output.innerHTML =
+            "<strong>Balanced equation:</strong><br><br>" +
+            "<span style='font-size:20px'>" + balanced + "</span><br><br>" +
+            "<strong>Verification:</strong> All atoms are conserved.";
+
+    } catch (error) {
+        output.textContent = error.message;
+    }
+}
+
+
+// ==================================
+// EXAMPLE EQUATIONS
+// ==================================
+
+function setExample(equation) {
+    document.getElementById("equation").value = equation;
+    balanceEquation();
+}
+
+
+// ==================================
+// REACTION ASSISTANT
+// ==================================
+
+function showReaction(type) {
+    const output = document.getElementById("reactionResult");
+
+    const reactions = {
+        water: {
+            name: "Formation of water",
+            equation: "2H2 + O2 → 2H2O",
+            explanation: "Hydrogen reacts with oxygen to form water."
+        },
+
+        neutralization: {
+            name: "Neutralization",
+            equation: "HCl + NaOH → NaCl + H2O",
+            explanation: "An acid reacts with a base to form salt and water."
+        },
+
+        combustion: {
+            name: "Combustion of propane",
+            equation: "C3H8 + 5O2 → 3CO2 + 4H2O",
+            explanation: "Propane burns in oxygen to produce carbon dioxide and water."
+        }
+    };
+
+    const reaction = reactions[type];
+
+    output.innerHTML =
+        "<strong>" + reaction.name + "</strong><br><br>" +
+        reaction.equation + "<br><br>" +
+        reaction.explanation;
+}
+
+</script>
+
+</body>
+</html>
